@@ -23,6 +23,8 @@ public class KMeans {
         Data = X;
         dataPoints = X.size();
         clusters = Y;
+        centroids = new ArrayList<DataPoint>();
+        cluster = new ArrayList<Integer>();
         setCentroidsRandomly();
         /////////////////////////////////
         
@@ -66,7 +68,7 @@ public class KMeans {
                 centroids.set(i, newCentroid) ;
             }
         }
-        
+ 
         
         
         return centroids;
