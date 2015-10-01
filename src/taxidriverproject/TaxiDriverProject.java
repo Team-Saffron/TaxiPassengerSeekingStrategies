@@ -37,13 +37,10 @@ public class TaxiDriverProject {
         ArrayList<DataPoint>custData,results;
         double time,lat,lon;
         /**
-         * 
          * Load Data
-         * 
          */
         String FileName = "D:\\TaxiDriverProject\\TaxiDriverProject\\Data.txt";
         Scanner freader = new Scanner(new File(FileName));
-        
         
         while(freader.hasNextDouble())
         {
@@ -53,21 +50,22 @@ public class TaxiDriverProject {
             temp.lon = freader.nextDouble();
             data.add(temp);
         }
-        /**
-         * 
+        /** 
          * Take Input
-         * 
          */
         Scanner in = new Scanner(System.in);
         
         time = in.nextDouble();
         lat = in.nextDouble();
         lon = in.nextDouble();
-        custData = getCustData(time,lat,lon,data);
+        custData = getCustData(time, data);
         results = Obj.KMeansAlgo(custData, noOfClusters);
-        
+        for(i=0;i<results.size();i++)
+        {
+           // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
+        }  
     }
-    ArrayList<DataPoint>getCustData(double time,double lat,double lon,ArrayList<DataNode> data)
+    ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
         ArrayList<DataPoint> temp = new ArrayList();
         int i,pos = 0;
@@ -101,6 +99,7 @@ public class TaxiDriverProject {
         return temp;
     }
     public static void main(String[] args) throws Exception {
+
         TaxiDriverProject Obj = new TaxiDriverProject();
         Obj.go();
         

@@ -20,19 +20,27 @@ public class KMeans {
     
     public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> X,int Y)
     {
+        /**
+         * Variable Declarations
+         */
         Data = X;
         dataPoints = X.size();
         clusters = Y;
         centroids = new ArrayList<DataPoint>();
         cluster = new ArrayList<Integer>();
-        setCentroidsRandomly();
-        /////////////////////////////////
-        
-        for(int i=0;i<dataPoints;i++)
-            cluster.add(0);
-        
         int noOfIteration = 100,i,j;
         double minDist,curDist;
+        
+        /**
+         * Initialization
+         */
+        setCentroidsRandomly();
+        
+        for(i=0;i<dataPoints;i++)
+            cluster.add(0);
+        /**
+         * K - Means Algorithm
+         */
         while(noOfIteration-- > 0)
         {
             for(i=0;i<dataPoints;i++)
@@ -48,30 +56,46 @@ public class KMeans {
                     }
                 }
             }
-            //Update Centroids to mean of DataPoints
-            
+            /**
+             * Update Centroids to mean of DataPoints
+             */
             for(i=0;i<clusters;i++)
             {
                 DataPoint newCentroid = new DataPoint();
-                int counter = 0;
+                double counter = 0;
                 for(j=0;j<dataPoints;j++)
                 {
-                    if(cluster.get(i) ==  j)
+                    if(cluster.get(j) ==  i)
                     {
                         counter++;
-                        newCentroid.lat = newCentroid.lat + Data.get(i).lat;
-                        newCentroid.lon = newCentroid.lon + Data.get(i).lon;
+                        newCentroid.lat = newCentroid.lat + Data.get(j).lat;
+                        newCentroid.lon = newCentroid.lon + Data.get(j).lon;
                     }
                 }
                 newCentroid.lat = newCentroid.lat/counter;
                 newCentroid.lon = newCentroid.lon/counter;
                 centroids.set(i, newCentroid) ;
             }
+            
+            
+            /**
+             * Evaluate Cost Function
+             */
+            
+            double cost = costFunc(); 
+            System.out.println(cost/10000000);   
         }
- 
-        
-        
         return centroids;
+    }
+    double costFunc()
+    {
+        double res = 0.0;
+        int i;
+        for(i=0;i<dataPoints;i++)
+        {
+            res = res + (dist(Data.get(i),centroids.get(cluster.get(i))));
+        }
+        return res;
     }
     double dist(DataPoint A,DataPoint B)
     {
