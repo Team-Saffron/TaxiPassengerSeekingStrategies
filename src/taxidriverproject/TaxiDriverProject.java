@@ -3,20 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class DataNode
-{
-    double lat,time,lon;
-    DataNode(){
-        lat = time = lon =0.0;
-    }
-    @Override
-    public String toString() {
-        return "DataNode{" + "lat=" + lat + ", time=" + time + ", lon=" + lon + '}';
-    }
-    
-};
-public class TaxiDriverProject {
-    
+public class TaxiDriverProject {    
     ArrayList<DataNode> data = new ArrayList();
     
     private int windowSize = 15;
@@ -101,5 +88,20 @@ public class TaxiDriverProject {
         TaxiDriverProject Obj = new TaxiDriverProject();
         Obj.go();   
     }
+    
+    
+    
+    private class DataNode
+    {
+        double lat,time,lon;
+        DataNode(){
+            lat = time = lon =0.0;
+        }
+        @Override
+        public String toString() {
+            return "DataNode{" + "lat=" + lat + ", time=" + time + ", lon=" + lon + '}';
+        }
+
+    };
     
 }
