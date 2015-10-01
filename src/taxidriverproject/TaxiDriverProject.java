@@ -10,17 +10,19 @@ public class TaxiDriverProject {
     private int dayTime = 1440;
     private int noOfClusters = 12;
     private int forwardWindowWidth = 1500;
-    private int backwardWindowWidth = 1500;
+    private int backwardWindowWidth = 500;
+    private ArrayList<Integer> crowdAtEachCentroid;
+    private ArrayList<Double> densityAtEachCentroid;
+    ArrayList<DataPoint>custData,resultantCentroids;
     
     void go() throws Exception
     {
         DataNode temp;   
         KMeans Obj = new KMeans();
-        
-        ArrayList<DataPoint>custData,results;
+        int i;
         double time,lat,lon;
         
-        //input from the dataset
+        //Load Data From DataSet
         String FileName = "Data.txt";
         Scanner freader = new Scanner(new File(FileName));
         while(freader.hasNextDouble())
@@ -32,7 +34,7 @@ public class TaxiDriverProject {
             data.add(temp);
         }
         freader.close();
-        //input from the dataset finished
+        //Data Loaded
 
         //user gps location and curr time input
         Scanner in = new Scanner(System.in);
@@ -45,10 +47,15 @@ public class TaxiDriverProject {
         //filtering done
         
         //cluster the window
-        results = Obj.KMeansAlgo(custData, noOfClusters);
-  
-        for(int i=0;i<results.size();i++)
-           System.out.println(results.get(i));
+        resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
+        crowdAtEachCentroid = Obj.calculateCrowd();
+        densityAtEachCentroid = Obj.calculateDensity();
+        for(i=0;i<resultantCentroids.size();i++)
+        {
+           // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
+            System.out.println(crowdAtEachCentroid.get(i));
+            System.out.println(densityAtEachCentroid.get(i));
+        }  
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
@@ -103,5 +110,21 @@ public class TaxiDriverProject {
         }
 
     };
+    
+    
+    //Utility Functions
+    ArrayList<DataPoint> getCentroids()
+    {
+        return resultantCentroids;
+    }
+    
+    ArrayList<Double> getDensityAtEachCentroid()
+    {
+        return densityAtEachCentroid;
+    }
+    ArrayList<Integer> getCrowdAtEachCentroid()
+    {
+        return crowdAtEachCentroid;
+    }
     
 }

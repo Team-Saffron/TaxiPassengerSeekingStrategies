@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class KMeans {
     
     private ArrayList<DataPoint> centroids,data;
-    private ArrayList<Integer> cluster;
+    private ArrayList<Integer> clusterOf;
     private int clusters,samples;
     private int noOfIterations;
     
@@ -15,17 +15,17 @@ public class KMeans {
     
     public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> x,int y)
     {
-        data = x;  //dataset
+        data = x;           //dataset
         samples = x.size(); //number of datapoints
-        clusters = y; //number of clusters
+        clusters = y;       //number of clusters
         
-        centroids = new ArrayList<DataPoint>(); //cluster Centroid Positions
-        cluster = new ArrayList<Integer>(); //cluster assigned to the ith sample
+        centroids = new ArrayList<>(); //cluster Centroid Positions
+        clusterOf = new ArrayList<>(); //cluster assigned to the ith sample
         
         double minDist,curDist;
        
         setCentroidsRandomly();       
-        for(int i=0;i<samples;i++)cluster.add(0);
+        for(int i=0;i<samples;i++)clusterOf.add(0);
  
         while(noOfIterations-- > 0)
         {
@@ -39,7 +39,7 @@ public class KMeans {
                     if(curDist < minDist)
                     {
                         minDist = curDist;
-                        cluster.set(i, j);
+                        clusterOf.set(i, j);
                     }
                 }
             }
@@ -51,7 +51,7 @@ public class KMeans {
                 double counter = 0;
                 for(int j=0;j<samples;j++)
                 {
-                    if(cluster.get(j) ==  i)
+                    if(clusterOf.get(j) ==  i)
                     {
                         counter++;
                         newCentroid.lat = newCentroid.lat + data.get(j).lat;
@@ -69,11 +69,75 @@ public class KMeans {
         }
         return centroids;
     }
+    
+    ArrayList<Integer> calculateCrowd()
+    {
+        ArrayList<Integer> toReturn =  new ArrayList<>();
+        int i;
+        /**
+         * Initialization
+         */    
+        for(i=0;i<clusters;i++)
+        {
+            toReturn.add(0);
+        }   
+        /**
+         * Count Crowd at each Centroid
+         */
+        for(i=0;i<data.size();i++)
+        {
+            toReturn.set(clusterOf.get(i), toReturn.get(clusterOf.get(i))+1);
+        }
+        return toReturn;
+    }
+    ArrayList<Double> calculateDensity()
+    {
+        ArrayList<Double> toReturn = new ArrayList<>();
+        ArrayList<Double> maxDist = new ArrayList<>();
+        int i;
+        
+        //Initializetion
+        for(i=0;i<clusters;i++)
+        {
+            toReturn.add(0.0);
+            maxDist.add(0.0);
+        }
+        
+        //Setting Distance of Furthest point in a Cluster
+        for(i=0;i<samples;i++)
+        {
+            if(DataPoint.dist(data.get(i), centroids.get(clusterOf.get(i))) > maxDist.get(clusterOf.get(i)))
+            {
+                maxDist.set(clusterOf.get(i), DataPoint.dist(data.get(i), centroids.get(clusterOf.get(i))));
+            }
+        }
+        
+        //Calling findDensityUtility for finding density
+        toReturn = findDensityUtility(maxDist);
+        return toReturn;            
+    }
+    ArrayList<Double> findDensityUtility(ArrayList<Double> maxDist)
+    {
+        ArrayList<Double> toReturn = new ArrayList<>();
+        double K = Math.pow(2, 20);
+        ArrayList<Integer> crowdAtEachCentroid;
+        int i;
+        crowdAtEachCentroid = calculateCrowd();
+        
+        //Find Density and Multiply it with a constant
+        
+        for(i=0;i<clusters;i++)
+        {
+            double temp = (crowdAtEachCentroid.get(i)/maxDist.get(i)) *  K;
+            toReturn.add(temp);
+        }
+        return toReturn;
+    }
     private double costFunc()
     {
         double res = 0.0;
         for(int i=0;i<samples;i++)
-            res+=(DataPoint.dist(data.get(i),centroids.get(cluster.get(i))))/10000000;
+            res+=(DataPoint.dist(data.get(i),centroids.get(clusterOf.get(i))))/10000000;
         return res;
     }
     private void setCentroidsRandomly()
