@@ -1,54 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package taxidriverproject;
-
 import java.util.ArrayList;
 
-/**
- *
- * @author Abhishek
- */
-
 public class KMeans {
-    ArrayList<DataPoint> centroids,Data;
-    ArrayList<Integer>cluster;
-    int clusters,dataPoints;
-
     
-    public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> X,int Y)
+    private ArrayList<DataPoint> centroids,data;
+    private ArrayList<Integer> cluster;
+    private int clusters,samples;
+    private int noOfIterations;
+    
+    KMeans()
     {
-        /**
-         * Variable Declarations
-         */
-        Data = X;
-        dataPoints = X.size();
-        clusters = Y;
-        centroids = new ArrayList<DataPoint>();
-        cluster = new ArrayList<Integer>();
-        int noOfIteration = 100,i,j;
+        noOfIterations = 100;
+    }
+    
+    public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> x,int y)
+    {
+        data = x;  //dataset
+        samples = x.size(); //number of datapoints
+        clusters = y; //number of clusters
+        
+        centroids = new ArrayList<DataPoint>(); //cluster Centroid Positions
+        cluster = new ArrayList<Integer>(); //cluster assigned to the ith sample
+        
         double minDist,curDist;
-        
-        /**
-         * Initialization
-         */
-        setCentroidsRandomly();
-        
-        for(i=0;i<dataPoints;i++)
-            cluster.add(0);
-        /**
-         * K - Means Algorithm
-         */
-        while(noOfIteration-- > 0)
+       
+        setCentroidsRandomly();       
+        for(int i=0;i<samples;i++)cluster.add(0);
+ 
+        while(noOfIterations-- > 0)
         {
-            for(i=0;i<dataPoints;i++)
+            //assignment of the cluster centroids
+            for(int i=0;i<samples;i++)
             {
-                minDist = Math.pow(2, 100);
-                for(j=0;j<clusters;j++)
+                minDist = DataPoint.dist(centroids.get(0), data.get(i));
+                for(int j=1;j<clusters;j++)
                 {
-                    curDist = dist(centroids.get(j),Data.get(i)); 
+                    curDist = DataPoint.dist(centroids.get(j),data.get(i)); 
                     if(curDist < minDist)
                     {
                         minDist = curDist;
@@ -56,59 +43,43 @@ public class KMeans {
                     }
                 }
             }
-            /**
-             * Update Centroids to mean of DataPoints
-             */
-            for(i=0;i<clusters;i++)
+            //assignment of the cluster centroids done
+            //moving the cluster centroid to their new position
+            for(int i=0;i<clusters;i++)
             {
                 DataPoint newCentroid = new DataPoint();
                 double counter = 0;
-                for(j=0;j<dataPoints;j++)
+                for(int j=0;j<samples;j++)
                 {
                     if(cluster.get(j) ==  i)
                     {
                         counter++;
-                        newCentroid.lat = newCentroid.lat + Data.get(j).lat;
-                        newCentroid.lon = newCentroid.lon + Data.get(j).lon;
+                        newCentroid.lat = newCentroid.lat + data.get(j).lat;
+                        newCentroid.lon = newCentroid.lon + data.get(j).lon;
                     }
                 }
                 newCentroid.lat = newCentroid.lat/counter;
                 newCentroid.lon = newCentroid.lon/counter;
                 centroids.set(i, newCentroid) ;
             }
-            
-            
-            /**
-             * Evaluate Cost Function
-             */
+            //cluster centroids updated
             
             double cost = costFunc(); 
-            System.out.println(cost/10000000);   
+            //System.out.println(cost);   
         }
         return centroids;
     }
-    double costFunc()
+    private double costFunc()
     {
         double res = 0.0;
-        int i;
-        for(i=0;i<dataPoints;i++)
-        {
-            res = res + (dist(Data.get(i),centroids.get(cluster.get(i))));
-        }
+        for(int i=0;i<samples;i++)
+            res+=(DataPoint.dist(data.get(i),centroids.get(cluster.get(i))))/10000000;
         return res;
     }
-    double dist(DataPoint A,DataPoint B)
+    private void setCentroidsRandomly()
     {
-       double res;
-       res = Math.pow((A.lat - B.lat),2) + Math.pow(A.lon - B.lon,2);
-       return res; 
-    }
-    public void setCentroidsRandomly()
-    {
-        int i;
-        for(i=0;i<clusters;i++)
-        {
-            centroids.add(Data.get((int)(Math.random()*dataPoints)));
-        }
+        centroids.clear();
+        for(int i=0;i<clusters;i++)
+            centroids.add(data.get((int)(Math.random()*samples)));
     }
 }

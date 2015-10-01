@@ -1,47 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package taxidriverproject;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
-/**
- *
- * @author Abhishek
- */
+
 class DataNode
 {
     double lat,time,lon;
     DataNode(){
         lat = time = lon =0.0;
     }
+    @Override
+    public String toString() {
+        return "DataNode{" + "lat=" + lat + ", time=" + time + ", lon=" + lon + '}';
+    }
+    
 };
 public class TaxiDriverProject {
-
-    /**
-     * @param args the command line arguments
-     */
-    ArrayList<DataNode>data = new ArrayList();
-    int windowSize = 15;
-    int dayTime = 1440;
-    int noOfClusters = 12;
+    
+    ArrayList<DataNode> data = new ArrayList();
+    
+    private int windowSize = 15;
+    private int dayTime = 1440;
+    private int noOfClusters = 12;
+    private int forwardWindowWidth = 1500;
+    private int backwardWindowWidth = 1500;
+    
     void go() throws Exception
     {
-        
-        int i;
         DataNode temp;   
         KMeans Obj = new KMeans();
+        
         ArrayList<DataPoint>custData,results;
         double time,lat,lon;
-        /**
-         * Load Data
-         */
-        String FileName = "D:\\TaxiDriverProject\\TaxiDriverProject\\Data.txt";
-        Scanner freader = new Scanner(new File(FileName));
         
+        //input from the dataset
+        String FileName = "Data.txt";
+        Scanner freader = new Scanner(new File(FileName));
         while(freader.hasNextDouble())
         {
             temp = new DataNode();
@@ -50,20 +44,24 @@ public class TaxiDriverProject {
             temp.lon = freader.nextDouble();
             data.add(temp);
         }
-        /** 
-         * Take Input
-         */
+        freader.close();
+        //input from the dataset finished
+
+        //user gps location and curr time input
         Scanner in = new Scanner(System.in);
-        
         time = in.nextDouble();
         lat = in.nextDouble();
         lon = in.nextDouble();
+        
+        //filter the dataset(data Window)
         custData = getCustData(time, data);
+        //filtering done
+        
+        //cluster the window
         results = Obj.KMeansAlgo(custData, noOfClusters);
-        for(i=0;i<results.size();i++)
-        {
-           // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
-        }  
+  
+        for(int i=0;i<results.size();i++)
+           System.out.println(results.get(i));
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
@@ -78,17 +76,16 @@ public class TaxiDriverProject {
             }
         }
         i = pos;
-        while(i < (pos + 1500))
+        while(i < (pos + forwardWindowWidth))
         {
             i++;
             DataPoint D =  new DataPoint();
             D.lat = data.get(i%data.size()).lat;
             D.lon = data.get(i%data.size()).lon;
             temp.add(D);
-            
         }
         i = pos;
-        while(i > (pos - 500))
+        while(i > (pos - backwardWindowWidth))
         {
             i--;
             DataPoint D = new DataPoint();
@@ -98,11 +95,11 @@ public class TaxiDriverProject {
         }
         return temp;
     }
+    
     public static void main(String[] args) throws Exception {
 
         TaxiDriverProject Obj = new TaxiDriverProject();
-        Obj.go();
-        
+        Obj.go();   
     }
     
 }
