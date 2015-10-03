@@ -56,7 +56,7 @@ public class TaxiDriverProject {
         //  Checking Code
        /*
         for(i=0;i<resultantCentroids.size();i++)
-        {
+        { 
            // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
             System.out.println(crowdAtEachCentroid.get(i));
             System.out.println(densityAtEachCentroid.get(i));
@@ -65,7 +65,14 @@ public class TaxiDriverProject {
         
         //Call Precitor
         CentroidPredictor CP = new CentroidPredictor(this);
-        CP.startExec();
+        DataPoint prediction = CP.startExec();
+        
+        System.out.println(prediction);
+        MapEngine googleMaps = new MapEngine(new MapNode(new DataPoint(lat,lon),prediction),0);
+        System.out.println(googleMaps.getSource());
+        System.out.println(googleMaps.getDestination());
+        System.out.println(googleMaps.getTime());
+        System.out.println(googleMaps.getDistance());
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {

@@ -17,6 +17,19 @@ class MapNode
         this.dLat = dLat;
         this.dLon = dLon;
     }
+    MapNode(DataPoint d1,DataPoint d2)
+    {
+        this.sLat = d1.lat;
+        this.sLon = d1.lon;
+        this.dLat = d2.lat;
+        this.dLon = d2.lon;
+    }
+
+    @Override
+    public String toString() {
+        return "MapNode{" + "sLat=" + sLat + ", sLon=" + sLon + ", dLat=" + dLat + ", dLon=" + dLon + '}';
+    }
+    
 }
 
 public class MapEngine {
@@ -28,9 +41,10 @@ public class MapEngine {
     MapEngine(MapNode m,int type)
     {
         //Type 0: Distance matrix api
-        
          this.type = type;
          Obj =  Utility.requestJSON(m, type);
+         
+         //System.out.println(m);
          time = -1;
          dist = -1;
          setInfo();
@@ -49,6 +63,7 @@ public class MapEngine {
     {
         JSONArray destination_address = (JSONArray)Obj.get("destination_addresses");
         JSONArray origin_address = (JSONArray)Obj.get("origin_addresses");
+        
         JSONArray rows = (JSONArray)Obj.get("rows");
         srcAddress = (String) origin_address.get(0);
         destAddress = (String) destination_address.get(0);
@@ -60,7 +75,6 @@ public class MapEngine {
         JSONObject duration = (JSONObject)aux.get("duration");
         JSONObject distance = (JSONObject)aux.get("distance");
       
-        
         time = Double.parseDouble(duration.get("value").toString())/60;
         dist= Double.parseDouble(distance.get("value").toString());
     }

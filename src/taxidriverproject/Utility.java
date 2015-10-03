@@ -27,6 +27,7 @@ public class Utility {
     public static JSONObject requestJSON(MapNode m, int type)
     {
         String s = getURL(m, type); 
+        //System.out.println(s);
         String dJSON = "";
         try
         {

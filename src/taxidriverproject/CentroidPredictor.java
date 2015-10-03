@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package taxidriverproject;
-
 import java.util.ArrayList;
 import taxidriverproject.TaxiDriverProject.DataNode;
 
-/**
- *
- * @author Abhishek
- */
+
 public class CentroidPredictor {
     DataNode SourceInfo;
     private ArrayList<DataPoint> centroids;
@@ -28,15 +19,33 @@ public class CentroidPredictor {
     {
        
     }
-    void startExec()
-    {
-        int i=0;
-        for(i=0;i<centroids.size();i++)
+    DataPoint startExec()
+    {   
+        int pos = 0;
+        double maximum = 0.0;
+        for(int i = 0;i<centroids.size();i++)
         {
-            MapNode node = new MapNode(centroids.get(i).lat,centroids.get(i).lon,centroids.get(0).lat,centroids.get(0).lon);
-            MapEngine googleMaps = new MapEngine(node,0); 
-            System.out.println(googleMaps.getSource());
+            MapNode node = new MapNode(SourceInfo.lat,SourceInfo.lon,centroids.get(i).lat,centroids.get(i).lon);
+         
+            MapEngine googleMaps = new MapEngine(node,0);
+            //System.out.println(node);
+
+            double prob_success = hypothesis(densityAtEachCentroid.get(i),crowdAtEachCentroid.get(i),googleMaps.getDistance(),googleMaps.getTime());
+            if(prob_success>maximum)
+            {
+                maximum = prob_success;
+                pos = i;
+            }
         }
+        return centroids.get(pos);
+    }
+    
+    private double hypothesis(double croudDensity,int croud,double distance,double time)
+    {
+        double sucess =  10.0 * croudDensity + 5.0*croud - 10.0*distance - 10.0*time; //preformance reward
+        double prob = 1 - Math.exp(-sucess); //logistic probabilty sigmoid function
+        prob = 1.0/prob;
+        return prob;
     }
     private ArrayList<DataPoint> parseLatLon(ArrayList<DataPoint> L)
     {
@@ -54,3 +63,4 @@ public class CentroidPredictor {
     }
     
 }
+ 
