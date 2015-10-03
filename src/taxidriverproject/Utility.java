@@ -39,7 +39,10 @@ public class Utility {
             //Reading Data from Link(s)
             int ch;
             while((ch=in.read())!=-1)
+            {
+                //System.out.print((char)ch);
                 dJSON = dJSON + (char)ch;
+            }
             
             //Closing Connection
             hps.disconnect();
@@ -69,7 +72,12 @@ public class Utility {
                 + "&destinations="
                 + m.dLat + "," + m.dLon
                 + "&key=AIzaSyAQeBAutaj4zNav-fgtQnzCwBNpYtMag4A";
-                
+            case 1:
+                return "https://maps.googleapis.com/maps/api/directions/json?origin="
+                        + m.sLat + "," + m.sLon
+                        +"&destination="
+                        + m.dLat + "," + m.dLon
+                        + "&key=AIzaSyCuxBrNhuIArFDI7OwiEx9-sUy2wc1o-ag";
             default:
                 return null;
         }

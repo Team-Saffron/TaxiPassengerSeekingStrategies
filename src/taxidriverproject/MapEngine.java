@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
  
-
 class MapNode
 {
     double sLat,sLon,dLat,dLon;
@@ -28,8 +27,7 @@ class MapNode
     @Override
     public String toString() {
         return "MapNode{" + "sLat=" + sLat + ", sLon=" + sLon + ", dLat=" + dLat + ", dLon=" + dLon + '}';
-    }
-    
+    }   
 }
 
 public class MapEngine {
@@ -37,14 +35,13 @@ public class MapEngine {
     private JSONObject Obj;
     private int type;
     private double time,dist;
-    private String srcAddress, destAddress;
+    private String srcAddress, destAddress,polyLine;
+    
     MapEngine(MapNode m,int type)
     {
         //Type 0: Distance matrix api
          this.type = type;
          Obj =  Utility.requestJSON(m, type);
-         
-         //System.out.println(m);
          time = -1;
          dist = -1;
          setInfo();
@@ -56,6 +53,9 @@ public class MapEngine {
         {
             case 0:
                 setTimeAndDistance();
+                break;
+            case 1:
+                setPolyLine();
                 break;
         }
     }
@@ -79,6 +79,15 @@ public class MapEngine {
         dist= Double.parseDouble(distance.get("value").toString());
     }
     
+    private void setPolyLine()
+    {
+        //System.out.println(Obj);
+        
+        JSONArray routes = (JSONArray)Obj.get("routes");
+        JSONObject temp = (JSONObject)routes.get(0);
+        JSONObject pl = (JSONObject)temp.get("overview_polyline");
+        polyLine = pl.get("points").toString();
+    }
     
     //InterFacing Functions
     
@@ -98,6 +107,10 @@ public class MapEngine {
     public String getDestination()
     {
         return destAddress;
+    }
+    public String getPolyLine()
+    {
+        return polyLine;
     }
   
 }

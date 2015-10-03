@@ -40,9 +40,9 @@ public class TaxiDriverProject {
 
         //user gps location and curr time input
         Scanner in = new Scanner(System.in);
-        time = in.nextDouble();
-        lat = in.nextDouble();
-        lon = in.nextDouble();
+       // time = in.nextDouble();
+        //lat = in.nextDouble();
+        //lon = in.nextDouble();
         
         //filter the dataset(data Window)
         custData = getCustData(time, data);
@@ -64,7 +64,7 @@ public class TaxiDriverProject {
         */
         
         //Call Precitor
-        CentroidPredictor CP = new CentroidPredictor(this);
+       /* CentroidPredictor CP = new CentroidPredictor(this);
         DataPoint prediction = CP.startExec();
         
         System.out.println(prediction);
@@ -72,7 +72,12 @@ public class TaxiDriverProject {
         System.out.println(googleMaps.getSource());
         System.out.println(googleMaps.getDestination());
         System.out.println(googleMaps.getTime());
-        System.out.println(googleMaps.getDistance());
+        System.out.println(googleMaps.getDistance());*/
+        
+        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        MapEngine googleMaps = new MapEngine(node,1);
+        System.out.println(googleMaps.getPolyLine());
+        
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
