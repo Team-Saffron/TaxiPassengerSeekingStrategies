@@ -92,8 +92,16 @@ public class TaxiDriverProject {
     
     public static void main(String[] args) throws Exception {
 
-        TaxiDriverProject Obj = new TaxiDriverProject();
-        Obj.go();   
+        //TaxiDriverProject Obj = new TaxiDriverProject();
+        //Obj.go();
+        
+        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        MapEngine googleMaps = new MapEngine(node,0);
+        
+        System.out.println(googleMaps.getDistance());
+        System.out.println(googleMaps.getTime());
+        
+        
     }
     
     

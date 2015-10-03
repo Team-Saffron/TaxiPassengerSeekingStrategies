@@ -1,71 +1,75 @@
-
-package taxidriverproject;
-
-
-import java.net.*;
+package taxidriverproject;import java.net.*;
 import java.io.*;
+import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+ 
 
-public class MapEngine {
-    
-    private double sLat,sLon,dLat,dLon;
-    public static String distanceMatrixApi;
-    
-    MapEngine(double sLat,double sLon,double dLat,double dLon)
+class MapNode
+{
+    double sLat,sLon,dLat,dLon;
+    MapNode(double sLat,double sLon,double dLat,double dLon)
     {
         this.sLat = sLat;
         this.sLon = sLon;
         this.dLat = dLat;
         this.dLon = dLon;
-  
-         distanceMatrixApi = "https://maps.googleapis.com/maps/api/distancematrix/json?"
-                + "origins="
-                + sLat + "," + sLon
-                + "&destinations="
-                + dLat + "," + dLon
-                + "&key=AIzaSyAQeBAutaj4zNav-fgtQnzCwBNpYtMag4A";
+    }
+}
+
+public class MapEngine {
+    
+    private JSONObject Obj;
+    private int type;
+    private double time,dist;
+    
+    MapEngine(MapNode m,int type)
+    {
+        //type 0 distance matrix api
+         String link = Utility.getURl(m, type);
+         this.type = type;
+         Obj =  Utility.requestJSON(link);
+         time = -1;
+         dist = -1;
+         
+         extractInfo();
     }
     
-     String requestJSON(String s)
+    void extractInfo()
     {
-        String dJSON = "";
-        try{
-            
-            URL url = new URL(distanceMatrixApi);
-            HttpURLConnection hps = (HttpURLConnection)url.openConnection();
-            
-            InputStream in = hps.getInputStream();
-            
-            int ch;
-            while((ch=in.read())!=-1)
-                dJSON = dJSON + (char)ch;
-            
-            hps.disconnect();
-        
-        }catch(Exception e){}
-        return dJSON;
+        switch(type)
+        {
+            case 0:
+                getTimeAndDistance();
+                break;
+        }
     }
-    /* private void parseJSON()
-     {
-         
-     }
-     double eDistance()
-     {
-         
-     }
-     double eTime()
-     {
-         
-     }
-     String polyline()
-     {
-         
-     }
-     String generateDirections()
-     {
-         
-     }
-     void saveImage()
-     {
-         
-     }*/
+    private void getTimeAndDistance()
+    {
+        
+        JSONArray rows = (JSONArray)Obj.get("rows");
+        
+        JSONObject elements = (JSONObject)rows.get(0);
+        JSONArray innerElements  = (JSONArray)elements.get("elements");
+        JSONObject aux = (JSONObject)innerElements.get(0);
+ 
+        JSONObject duration = (JSONObject)aux.get("duration");
+        JSONObject distance = (JSONObject)aux.get("distance");
+        
+        time = Double.parseDouble(duration.get("value").toString())/60;
+        dist= Double.parseDouble(distance.get("value").toString());
+    }
+    
+    double getTime()
+    {
+        return time;
+    }
+    
+    double getDistance()
+    {
+        return dist;
+    }
+  
 }
