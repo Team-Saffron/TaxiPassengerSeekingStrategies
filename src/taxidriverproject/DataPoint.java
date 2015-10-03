@@ -15,6 +15,11 @@ public class DataPoint {
     DataPoint(){
         lat = lon = 0;
     }
+    DataPoint(double x, double y)
+    {
+        lat = x;
+        lon = y;
+    }
     public static double dist(DataPoint a,DataPoint b)
     {
        double res;

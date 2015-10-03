@@ -23,8 +23,41 @@ import org.json.simple.parser.ParseException;
 public class Utility {
     
     public static JSONParser parser= new JSONParser();
-    
-     public static String getURl(MapNode m,int type)
+   
+    public static JSONObject requestJSON(MapNode m, int type)
+    {
+        String s = getURL(m, type); 
+        String dJSON = "";
+        try
+        {
+            URL url = new URL(s);
+            HttpURLConnection hps = (HttpURLConnection)url.openConnection();
+          
+            InputStream in = hps.getInputStream();
+            
+            //Reading Data from Link(s)
+            int ch;
+            while((ch=in.read())!=-1)
+                dJSON = dJSON + (char)ch;
+            
+            //Closing Connection
+            hps.disconnect();
+        
+        }
+        catch(Exception e)
+        {}
+        
+        try
+        {
+            return (JSONObject)parser.parse(dJSON);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return null;
+        }
+    }
+     private static String getURL(MapNode m,int type)
     {
         switch(type)
         {
@@ -38,32 +71,6 @@ public class Utility {
                 
             default:
                 return null;
-        }
-    }
-    public static JSONObject requestJSON(String s)
-    {
-        String dJSON = "";
-        try{
-            
-            URL url = new URL(s);
-            HttpURLConnection hps = (HttpURLConnection)url.openConnection();
-          
-            InputStream in = hps.getInputStream();
-            
-            int ch;
-            while((ch=in.read())!=-1)
-                dJSON = dJSON + (char)ch;
-            
-            hps.disconnect();
-        
-        }catch(Exception e){}
-        
-        try{
-        return (JSONObject)parser.parse(dJSON);
-        }catch(Exception e)
-        {
-            System.out.println(e);
-            return null;
         }
     }
 }

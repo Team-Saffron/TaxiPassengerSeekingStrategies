@@ -3,9 +3,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TaxiDriverProject {    
-    ArrayList<DataNode> data = new ArrayList();
+public class TaxiDriverProject {
     
+    //Variable Declarations
+    ArrayList<DataNode> data = new ArrayList();
+    private double lat, lon, time;
     private int windowSize = 15;
     private int dayTime = 1440;
     private int noOfClusters = 12;
@@ -14,13 +16,13 @@ public class TaxiDriverProject {
     private ArrayList<Integer> crowdAtEachCentroid;
     private ArrayList<Double> densityAtEachCentroid;
     ArrayList<DataPoint>custData,resultantCentroids;
+    //Variable Declaration Ended
     
     void go() throws Exception
     {
         DataNode temp;   
         KMeans Obj = new KMeans();
         int i;
-        double time,lat,lon;
         
         //Load Data From DataSet
         String FileName = "Data.txt";
@@ -46,16 +48,24 @@ public class TaxiDriverProject {
         custData = getCustData(time, data);
         //filtering done
         
-        //cluster the window
+        //Calculate cluster centroids, Crowd, Density at each centroids
         resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
         crowdAtEachCentroid = Obj.calculateCrowd();
         densityAtEachCentroid = Obj.calculateDensity();
+        
+        //  Checking Code
+       /*
         for(i=0;i<resultantCentroids.size();i++)
         {
            // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
             System.out.println(crowdAtEachCentroid.get(i));
             System.out.println(densityAtEachCentroid.get(i));
         }  
+        */
+        
+        //Call Precitor
+        CentroidPredictor CP = new CentroidPredictor(this);
+        CP.startExec();
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
@@ -90,37 +100,44 @@ public class TaxiDriverProject {
         return temp;
     }
     
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception 
+    {
 
-        //TaxiDriverProject Obj = new TaxiDriverProject();
-        //Obj.go();
+        TaxiDriverProject Obj = new TaxiDriverProject();
+        Obj.go();
         
-        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
-        MapEngine googleMaps = new MapEngine(node,0);
+        //MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+       // MapEngine googleMaps = new MapEngine(node,0);
         
-        System.out.println(googleMaps.getDistance());
-        System.out.println(googleMaps.getTime());
-        
+        //System.out.println(googleMaps.getDistance());
+        //System.out.println(googleMaps.getTime());
         
     }
     
     
     
-    private class DataNode
+    public class DataNode
     {
         double lat,time,lon;
         DataNode(){
             lat = time = lon =0.0;
         }
+        DataNode(double x,double y,double z)
+        {
+            lat = x;
+            lon = y;
+            time = z;
+        }
         @Override
-        public String toString() {
+        public String toString() 
+        {
             return "DataNode{" + "lat=" + lat + ", time=" + time + ", lon=" + lon + '}';
         }
 
     };
     
     
-    //Utility Functions
+    //Interfacing Functions
     ArrayList<DataPoint> getCentroids()
     {
         return resultantCentroids;
@@ -133,6 +150,10 @@ public class TaxiDriverProject {
     ArrayList<Integer> getCrowdAtEachCentroid()
     {
         return crowdAtEachCentroid;
+    }
+    DataNode getSourceInfo()
+    {
+        return new DataNode(lat, lon, time);
     }
     
 }

@@ -24,32 +24,34 @@ public class MapEngine {
     private JSONObject Obj;
     private int type;
     private double time,dist;
-    
+    private String srcAddress, destAddress;
     MapEngine(MapNode m,int type)
     {
-        //type 0 distance matrix api
-         String link = Utility.getURl(m, type);
+        //Type 0: Distance matrix api
+        
          this.type = type;
-         Obj =  Utility.requestJSON(link);
+         Obj =  Utility.requestJSON(m, type);
          time = -1;
          dist = -1;
-         
-         extractInfo();
+         setInfo();
     }
-    
-    void extractInfo()
+  
+    private void setInfo()
     {
         switch(type)
         {
             case 0:
-                getTimeAndDistance();
+                setTimeAndDistance();
                 break;
         }
     }
-    private void getTimeAndDistance()
+    private void setTimeAndDistance()
     {
-        
+        JSONArray destination_address = (JSONArray)Obj.get("destination_addresses");
+        JSONArray origin_address = (JSONArray)Obj.get("origin_addresses");
         JSONArray rows = (JSONArray)Obj.get("rows");
+        srcAddress = (String) origin_address.get(0);
+        destAddress = (String) destination_address.get(0);
         
         JSONObject elements = (JSONObject)rows.get(0);
         JSONArray innerElements  = (JSONArray)elements.get("elements");
@@ -57,19 +59,31 @@ public class MapEngine {
  
         JSONObject duration = (JSONObject)aux.get("duration");
         JSONObject distance = (JSONObject)aux.get("distance");
+      
         
         time = Double.parseDouble(duration.get("value").toString())/60;
         dist= Double.parseDouble(distance.get("value").toString());
     }
     
-    double getTime()
+    
+    //InterFacing Functions
+    
+    public double getTime()
     {
         return time;
     }
     
-    double getDistance()
+    public double getDistance()
     {
         return dist;
+    }
+    public String getSource()
+    {
+        return srcAddress;
+    }
+    public String getDestination()
+    {
+        return destAddress;
     }
   
 }
