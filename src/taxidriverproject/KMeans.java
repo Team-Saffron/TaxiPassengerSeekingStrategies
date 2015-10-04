@@ -3,14 +3,16 @@ import java.util.ArrayList;
 
 public class KMeans {
     
-    private ArrayList<DataPoint> centroids,data;
-    private ArrayList<Integer> clusterOf;
+    private ArrayList<DataPoint> centroids, data, tempCentroids;
+    private ArrayList<Integer> clusterOf, tempClusterOf;
     private int clusters,samples;
-    private int noOfIterations;
+    private int noOfIterations, noOfRandomInit;
+    
     
     KMeans()
     {
-        noOfIterations = 100;
+        noOfRandomInit = 12;
+        noOfIterations = 50;
     }
     
     public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> x,int y)
@@ -22,51 +24,66 @@ public class KMeans {
         centroids = new ArrayList<>(); //cluster Centroid Positions
         clusterOf = new ArrayList<>(); //cluster assigned to the ith sample
         
-        double minDist,curDist;
+        double minDist,curDist, minCost;
+        minCost = Math.pow(2, 100);
        
-        setCentroidsRandomly();       
-        for(int i=0;i<samples;i++)clusterOf.add(0);
- 
-        while(noOfIterations-- > 0)
-        {
-            //assignment of the cluster centroids
+        while(noOfRandomInit-- > 0)
+        {   
+            setCentroidsRandomly();    
+            clusterOf = new ArrayList<>();
             for(int i=0;i<samples;i++)
+                clusterOf.add(0);
+
+            while(noOfIterations-- > 0)
             {
-                minDist = DataPoint.dist(centroids.get(0), data.get(i));
-                for(int j=1;j<clusters;j++)
+                //assignment of the cluster centroids
+                for(int i=0;i<samples;i++)
                 {
-                    curDist = DataPoint.dist(centroids.get(j),data.get(i)); 
-                    if(curDist < minDist)
+                    minDist = DataPoint.dist(centroids.get(0), data.get(i));
+                    for(int j=1;j<clusters;j++)
                     {
-                        minDist = curDist;
-                        clusterOf.set(i, j);
+                        curDist = DataPoint.dist(centroids.get(j),data.get(i)); 
+                        if(curDist < minDist)
+                        {
+                            minDist = curDist;
+                            clusterOf.set(i, j);
+                        }
                     }
                 }
-            }
-            //assignment of the cluster centroids done
-            //moving the cluster centroid to their new position
-            for(int i=0;i<clusters;i++)
-            {
-                DataPoint newCentroid = new DataPoint();
-                double counter = 0;
-                for(int j=0;j<samples;j++)
+                //assignment of the cluster centroids done
+                //moving the cluster centroid to their new position
+                for(int i=0;i<clusters;i++)
                 {
-                    if(clusterOf.get(j) ==  i)
+                    DataPoint newCentroid = new DataPoint();
+                    double counter = 0;
+                    for(int j=0;j<samples;j++)
                     {
-                        counter++;
-                        newCentroid.lat = newCentroid.lat + data.get(j).lat;
-                        newCentroid.lon = newCentroid.lon + data.get(j).lon;
+                        if(clusterOf.get(j) ==  i)
+                        {
+                            counter++;
+                            newCentroid.lat = newCentroid.lat + data.get(j).lat;
+                            newCentroid.lon = newCentroid.lon + data.get(j).lon;
+                        }
                     }
+                    newCentroid.lat = newCentroid.lat/counter;
+                    newCentroid.lon = newCentroid.lon/counter;
+                    centroids.set(i, newCentroid) ;
                 }
-                newCentroid.lat = newCentroid.lat/counter;
-                newCentroid.lon = newCentroid.lon/counter;
-                centroids.set(i, newCentroid) ;
+                //cluster centroids updated
+
+
+                //System.out.println(cost);   
             }
-            //cluster centroids updated
-            
             double cost = costFunc(); 
-            //System.out.println(cost);   
+            if(cost < minCost)
+            {
+                   tempCentroids = centroids;  //Temporary storing centroids and Clusterof
+                   tempClusterOf = clusterOf;
+                   minCost = cost;
+            }
         }
+        centroids = tempCentroids;
+        clusterOf = tempClusterOf;
         return centroids;
     }
     

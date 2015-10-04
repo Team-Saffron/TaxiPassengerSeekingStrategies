@@ -32,6 +32,9 @@ public class CentroidPredictor {
         double maximum = 0.0;
         distanceFromSource = new ArrayList<>();
         timeFromSource = new ArrayList<>();
+        
+        
+        // Extract Distance and Time
         for(int i = 0;i<centroids.size();i++)
         {
             MapNode node = new MapNode(SourceInfo.lat,SourceInfo.lon,centroids.get(i).lat,centroids.get(i).lon); 
@@ -39,8 +42,12 @@ public class CentroidPredictor {
             distanceFromSource.add(googleMaps.getDistance());
             timeFromSource.add(googleMaps.getTime());
         }
+        
+        //Normalise Distance and Time
         distanceFromSource = normaliseDouble(distanceFromSource);
         timeFromSource = normaliseDouble(timeFromSource);
+        
+        //Predict the best Centroid
         for(int i=0;i<centroids.size();i++)
         { 
             double prob_success = hypothesis(densityAtEachCentroid.get(i),crowdAtEachCentroid.get(i),distanceFromSource.get(i),timeFromSource.get(i));
@@ -50,21 +57,22 @@ public class CentroidPredictor {
                 pos = i;
             }
         }
+        
+        //return it
         preferredCentroid = centroids.get(pos);
         return centroids.get(pos);
     }
 
-    private double hypothesis(double croudDensity,double crowd,double distance,double time)
+    private double hypothesis(double crowdDensity,double crowd,double distance,double time)
     {
-        double success =  (croudDensity * crowd)/(distance * time);
-        System.out.println(croudDensity + " " + crowd + " " +distance + " "+ time);
+        double success =  (crowdDensity * crowd)/(distance * time);
+        System.out.println(crowdDensity + " " + crowd + " " +distance + " "+ time);
         return success;
     }
     
     
     /**
-     * Utility Function
-     * 
+     * Utility Functions
      */
     private ArrayList<DataPoint> parseLatLon(ArrayList<DataPoint> L)
     {
