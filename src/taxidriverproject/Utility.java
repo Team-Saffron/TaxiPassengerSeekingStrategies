@@ -26,7 +26,7 @@ public class Utility {
    
     public static JSONObject requestJSON(MapNode m, int type)
     {
-        String s = getURL(m, type); 
+        String s = getURL(m, type,null); 
         //System.out.println(s);
         String dJSON = "";
         try
@@ -61,13 +61,12 @@ public class Utility {
             return null;
         }
     }
-     public static String getURL(MapNode m,int type)
+     public static String getURL(MapNode m,int type,String polyLine)
     {
         switch(type)
         {
             case 0:
-                return "https://maps.googleapis.com/maps/api/distancematrix/json?"
-                + "origins="
+                return "https://maps.googleapis.com/maps/api/distancematrix/json?origins="
                 + m.sLat + "," + m.sLon
                 + "&destinations="
                 + m.dLat + "," + m.dLon
@@ -79,20 +78,26 @@ public class Utility {
                         + m.dLat + "," + m.dLon
                         + "&key=AIzaSyCuxBrNhuIArFDI7OwiEx9-sUy2wc1o-ag";
             case 2:
-                return "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=410x500&markers=color:blue%7Clabel:S%7C" +
-                        m.sLat + "," + m.sLon +
+                return "https://maps.googleapis.com/maps/api/staticmap?center="
+                        + m.sLat+","+m.sLon
+                        + "&zoom=12"
+                        + "&size=640x400"
+                        +"&markers=color:blue%7Clabel:S%7C"
+                        + m.sLat + "," + m.sLon +
                         "&markers=size:mid%7Ccolor:0xFFFF00%7Clabel:C%7C" +
-                        m.dLat + "," + m.dLon +
-                        "&key=AIzaSyD1cN1JPKEGxrbZ9qLyS_Eqsc-8AIwvHkQ";
+                        + m.dLat + "," + m.dLon 
+                        + "&path=weight:3%7"
+                        + "Ccolor:blue%7Cenc:"
+                        + polyLine + "&key=AIzaSyD1cN1JPKEGxrbZ9qLyS_Eqsc-8AIwvHkQ";
             default:
                 return null;
         }
     }
      
-    public static  void makeMap(MapNode m,int type)
+    public static  void makeMap(MapNode m,int type,String polyLine)
     {
         String dJSON = "";  
-        String U = getURL(m,type);
+        String U = getURL(m,type,polyLine);
         try
         {
             URL url = new URL(U);
