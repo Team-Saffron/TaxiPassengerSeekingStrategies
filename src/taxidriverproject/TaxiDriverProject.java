@@ -52,31 +52,10 @@ public class TaxiDriverProject {
         resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
         crowdAtEachCentroid = Obj.calculateCrowd();
         densityAtEachCentroid = Obj.calculateDensity();
-        
-        //  Checking Code
-       /*
-        for(i=0;i<resultantCentroids.size();i++)
-        { 
-           // System.out.println(results.get(i).lat + " " +  results.get(i).lon );
-            System.out.println(crowdAtEachCentroid.get(i));
-            System.out.println(densityAtEachCentroid.get(i));
-        }  
-        */
-        
+  
         //Call Precitor
-       CentroidPredictor CP = new CentroidPredictor(this);
+        CentroidPredictor CP = new CentroidPredictor(this);
         DataPoint prediction = CP.startExec();
-        
-        System.out.println(prediction);
-        MapEngine googleMaps = new MapEngine(new MapNode(new DataPoint(lat,lon),prediction),0);
-        System.out.println(googleMaps.getSource());
-        System.out.println(googleMaps.getDestination());
-        System.out.println(googleMaps.getTime());
-        System.out.println(googleMaps.getDistance());
-        
-        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
-        //MapEngine googleMaps = new MapEngine(node,1);
-      //  System.out.println(googleMaps.getPolyLine());
         
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
@@ -115,18 +94,16 @@ public class TaxiDriverProject {
     public static void main(String[] args) throws Exception 
     {
 
-        TaxiDriverProject Obj = new TaxiDriverProject();
-        Obj.go();
-        System.out.print(("DS"));
-        //MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
-       // MapEngine googleMaps = new MapEngine(node,0);
+        //TaxiDriverProject Obj = new TaxiDriverProject();
+        //Obj.go();
+        //System.out.print(("DS"));
+        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        MapEngine googleMaps = new MapEngine(node);
         
-        //System.out.println(googleMaps.getDistance());
-        //System.out.println(googleMaps.getTime());
+        System.out.println(googleMaps.getSource());
+        googleMaps.makeMap();
         
     }
-    
-    
     
     public class DataNode
     {
@@ -147,8 +124,7 @@ public class TaxiDriverProject {
         }
 
     };
-    
-    
+
     //Interfacing Functions
     ArrayList<DataPoint> getCentroids()
     {

@@ -36,31 +36,21 @@ public class MapEngine {
     private int type;
     private double time,dist;
     private String srcAddress, destAddress,polyLine;
+    private MapNode node;
     
-    MapEngine(MapNode m,int type)
+    MapEngine(MapNode m)
     {
         //Type 0: Distance matrix api
-         this.type = type;
-         Obj =  Utility.requestJSON(m, type);
+         node = m;
          time = -1;
          dist = -1;
-         setInfo();
+         srcAddress = destAddress = null;
+        
     }
-  
-    private void setInfo()
-    {
-        switch(type)
-        {
-            case 0:
-                setTimeAndDistance();
-                break;
-            case 1:
-                setPolyLine();
-                break;
-        }
-    }
+
     private void setTimeAndDistance()
     {
+        Obj =  Utility.requestJSON(node, 0);
         JSONArray destination_address = (JSONArray)Obj.get("destination_addresses");
         JSONArray origin_address = (JSONArray)Obj.get("origin_addresses");
         
@@ -81,8 +71,8 @@ public class MapEngine {
     
     private void setPolyLine()
     {
+        Obj =  Utility.requestJSON(node, 1);
         //System.out.println(Obj);
-        
         JSONArray routes = (JSONArray)Obj.get("routes");
         JSONObject temp = (JSONObject)routes.get(0);
         JSONObject pl = (JSONObject)temp.get("overview_polyline");
@@ -93,24 +83,38 @@ public class MapEngine {
     
     public double getTime()
     {
+        if(time==-1)
+            setTimeAndDistance();
         return time;
     }
     
     public double getDistance()
     {
+        if(dist==-1)
+            setTimeAndDistance();
         return dist;
     }
     public String getSource()
     {
+        if(srcAddress==null)
+            setTimeAndDistance();
         return srcAddress;
     }
     public String getDestination()
     {
+        if(destAddress==null)
+            setTimeAndDistance();
         return destAddress;
     }
     public String getPolyLine()
     {
+        if(polyLine==null)
+            setPolyLine();
         return polyLine;
+    }
+    public void makeMap()
+    {
+        Utility.makeMap(node,2);
     }
   
 }

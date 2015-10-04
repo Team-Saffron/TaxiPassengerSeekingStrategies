@@ -61,7 +61,7 @@ public class Utility {
             return null;
         }
     }
-     private static String getURL(MapNode m,int type)
+     public static String getURL(MapNode m,int type)
     {
         switch(type)
         {
@@ -78,8 +78,36 @@ public class Utility {
                         +"&destination="
                         + m.dLat + "," + m.dLon
                         + "&key=AIzaSyCuxBrNhuIArFDI7OwiEx9-sUy2wc1o-ag";
+            case 2:
+                return "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=410x500&markers=color:blue%7Clabel:S%7C" +
+                        m.sLat + "," + m.sLon +
+                        "&markers=size:mid%7Ccolor:0xFFFF00%7Clabel:C%7C" +
+                        m.dLat + "," + m.dLon +
+                        "&key=AIzaSyD1cN1JPKEGxrbZ9qLyS_Eqsc-8AIwvHkQ";
             default:
                 return null;
         }
+    }
+     
+    public static  void makeMap(MapNode m,int type)
+    {
+        String dJSON = "";  
+        String U = getURL(m,type);
+        try
+        {
+            URL url = new URL(U);
+            HttpURLConnection hps = (HttpURLConnection)url.openConnection();
+            InputStream in = hps.getInputStream();
+            FileOutputStream fwriter = new FileOutputStream(new File("img.jpeg"));
+            int ch;
+            while((ch=in.read())!=-1)
+            {
+                fwriter.write(ch);
+            }
+            //Closing Connection
+            hps.disconnect();
+        
+        }
+        catch(Exception e){}
     }
 }

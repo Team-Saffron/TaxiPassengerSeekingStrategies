@@ -33,9 +33,8 @@ public class CentroidPredictor {
         {
             MapNode node = new MapNode(SourceInfo.lat,SourceInfo.lon,centroids.get(i).lat,centroids.get(i).lon);
          
-            MapEngine googleMaps = new MapEngine(node,0);
-            //System.out.println(node);
-
+            MapEngine googleMaps = new MapEngine(node);
+          
             double prob_success = hypothesis(densityAtEachCentroid.get(i),crowdAtEachCentroid.get(i),googleMaps.getDistance(),googleMaps.getTime());
             if(prob_success>maximum)
             {
@@ -44,43 +43,9 @@ public class CentroidPredictor {
             }
         }
          preferredCentroid = centroids.get(pos);
-        makeMap();
         return centroids.get(pos);
     }
-    private void makeMap()
-    {
-        String U = "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=410x500&markers=color:blue%7Clabel:S%7C" +
-         preferredCentroid.lat + "," + preferredCentroid.lon +
-         "&markers=size:mid%7Ccolor:0xFFFF00%7Clabel:C%7C" +
-         SourceInfo.lat + "," + SourceInfo.lon +
-         "&key=AIzaSyD1cN1JPKEGxrbZ9qLyS_Eqsc-8AIwvHkQ";
-        System.out.println(U);
-        String dJSON = "";  
-        System.out.println(SourceInfo);
-        System.out.println(preferredCentroid);
-        try
-        {
-            URL url = new URL(U);
-            HttpURLConnection hps = (HttpURLConnection)url.openConnection();
-          
-            InputStream in = hps.getInputStream();
-            FileOutputStream fwriter = new FileOutputStream(new File("img.jpeg"));
-            int ch;
-            while((ch=in.read())!=-1)
-            {
-                fwriter.write(ch);
-                //dJSON = dJSON + (char)ch;
-            }
-            //System.out.println(dJSON);
-            
-            
-            //Closing Connection
-            hps.disconnect();
-        
-        }
-        catch(Exception e)
-        {}
-    }
+
     private double hypothesis(double croudDensity,int crowd,double distance,double time)
     {
         double sucess =  10.0 * croudDensity + 5.0*crowd - 10.0*distance - 10.0*time; //preformance reward
