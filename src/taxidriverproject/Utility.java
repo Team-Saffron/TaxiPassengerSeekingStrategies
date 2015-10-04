@@ -80,7 +80,7 @@ public class Utility {
             case 2:
                 return "https://maps.googleapis.com/maps/api/staticmap?center="
                         + m.sLat+","+m.sLon
-                        + "&zoom=12"
+                        + "&zoom=14"
                         + "&size=640x400"
                         +"&markers=color:blue%7Clabel:S%7C"
                         + m.sLat + "," + m.sLon +

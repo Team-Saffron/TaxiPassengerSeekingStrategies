@@ -57,6 +57,9 @@ public class TaxiDriverProject {
         CentroidPredictor CP = new CentroidPredictor(this);
         DataPoint prediction = CP.startExec();
         
+        MapEngine googleMaps = new MapEngine(new MapNode(new DataPoint(lat,lon),prediction));
+        googleMaps.makeMap();
+        
     }
     ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
@@ -94,14 +97,14 @@ public class TaxiDriverProject {
     public static void main(String[] args) throws Exception 
     {
 
-        //TaxiDriverProject Obj = new TaxiDriverProject();
-        //Obj.go();
-        //System.out.print(("DS"));
-        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        TaxiDriverProject Obj = new TaxiDriverProject();
+        Obj.go();
+        System.out.print(("DS"));
+        /*MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
         MapEngine googleMaps = new MapEngine(node);
         
         System.out.println(googleMaps.getSource());
-        googleMaps.makeMap();
+        googleMaps.makeMap();*/
         
     }
     
