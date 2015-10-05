@@ -115,7 +115,6 @@ public class MapEngine {
     public void makeMap()
     {
         Utility.makeMap(node,2,getPolyLine());
-        ShowImage.displayMap();
     }
   
 }

@@ -13,8 +13,8 @@ public class CentroidPredictor {
     private ArrayList<DataPoint> centroids;
     private ArrayList<Double> crowdAtEachCentroid;
     private ArrayList<Double> densityAtEachCentroid, distanceFromSource, timeFromSource;
-    
     private DataPoint preferredCentroid;
+    
     CentroidPredictor(TaxiDriverProject T)
     {
         SourceInfo = T.getSourceInfo();

@@ -74,9 +74,10 @@ public class TaxiDriverProject {
         System.out.println(googleMaps.getSource());
         System.out.println(googleMaps.getDistance());
         googleMaps.makeMap();
+        OutputFrame output = new OutputFrame(googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
         
     }
-    ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
+    private ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
         ArrayList<DataPoint> temp = new ArrayList();
         int i,pos = 0;
