@@ -27,8 +27,10 @@ public class CentroidPredictor {
        
     }
     DataPoint startExec()
-    {   
-        int pos = 0;
+    {  
+         int pos = 0;
+        try{
+       
         double maximum = 0.0;
         distanceFromSource = new ArrayList<>();
         timeFromSource = new ArrayList<>();
@@ -60,6 +62,11 @@ public class CentroidPredictor {
         
         //return it
         preferredCentroid = centroids.get(pos);
+        }
+        catch(Exception E)
+        {
+            System.out.println(E);
+        }
         return centroids.get(pos);
     }
 

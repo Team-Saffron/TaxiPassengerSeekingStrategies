@@ -11,7 +11,7 @@ public class KMeans {
     
     KMeans()
     {
-        noOfRandomInit = 12;
+        noOfRandomInit = 100;
         noOfIterations = 50;
     }
     
@@ -154,7 +154,7 @@ public class KMeans {
     {
         double res = 0.0;
         for(int i=0;i<samples;i++)
-            res+=(DataPoint.dist(data.get(i),centroids.get(clusterOf.get(i))))/10000000;
+            res+=((DataPoint.dist(data.get(i),centroids.get(clusterOf.get(i))))/10000000);
         return res;
     }
     private void setCentroidsRandomly()

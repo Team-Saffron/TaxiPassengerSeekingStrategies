@@ -2,11 +2,12 @@ package taxidriverproject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JFrame;
 
 public class TaxiDriverProject {
     
     //Variable Declarations
-    ArrayList<DataNode> data = new ArrayList();
+    ArrayList<DataNode> data ;
     private double lat, lon, time;
     private int windowSize = 15;
     private int dayTime = 1440;
@@ -20,8 +21,9 @@ public class TaxiDriverProject {
     
     void go() throws Exception
     {
+        data = new ArrayList();
         DataNode temp;   
-        KMeans Obj = new KMeans();
+        
         int i;
         
         //Load Data From DataSet
@@ -37,14 +39,23 @@ public class TaxiDriverProject {
         }
         freader.close();
         //Data Loaded
-
+        System.out.print("Data Loaded");
+        System.out.println(lat + " " + lon + " " +data.size());
+        //Getting Data using J-Form
+        /*InputWindow IW = new InputWindow();
+        IW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        IW.initialize(this);*/
         //user gps location and curr time input
-        Scanner in = new Scanner(System.in);
+        /*Scanner in = new Scanner(System.in);
         time = in.nextDouble();
         lat = in.nextDouble();
-        lon = in.nextDouble();
-        
-        //filter the dataset(data Window)
+        lon = in.nextDouble();*/
+    }
+    void execute()
+    {
+        System.out.println(lat + " " + lon + " " +data.size());
+        KMeans Obj = new KMeans();
+        //filter the dataset(data Window)*/
         custData = getCustData(time, data);
         //filtering done
         
@@ -57,7 +68,11 @@ public class TaxiDriverProject {
         CentroidPredictor CP = new CentroidPredictor(this);
         DataPoint prediction = CP.startExec();
         
+        
         MapEngine googleMaps = new MapEngine(new MapNode(new DataPoint(lat,lon),prediction));
+        System.out.println(googleMaps.getDestination());
+        System.out.println(googleMaps.getSource());
+        System.out.println(googleMaps.getDistance());
         googleMaps.makeMap();
         
     }
@@ -97,9 +112,10 @@ public class TaxiDriverProject {
     public static void main(String[] args) throws Exception 
     {
 
-        TaxiDriverProject Obj = new TaxiDriverProject();
-        Obj.go();
-        System.out.print(("DS"));
+       /* TaxiDriverProject Obj = new TaxiDriverProject();
+        Obj.go();*/
+        new InputWindow().initialize();
+       
         /*MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
         MapEngine googleMaps = new MapEngine(node);
         
@@ -145,6 +161,13 @@ public class TaxiDriverProject {
     DataNode getSourceInfo()
     {
         return new DataNode(lat, lon, time);
+    }
+    
+    public void setData(double t,double lt,double ln)
+    {
+        time = t;
+        lat = lt;
+        lon = ln;
     }
     
 }

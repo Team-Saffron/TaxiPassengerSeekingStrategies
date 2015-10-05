@@ -49,7 +49,7 @@ public class Utility {
         
         }
         catch(Exception e)
-        {}
+        { }
         
         try
         {
@@ -78,9 +78,7 @@ public class Utility {
                         + m.dLat + "," + m.dLon
                         + "&key=AIzaSyCuxBrNhuIArFDI7OwiEx9-sUy2wc1o-ag";
             case 2:
-                return "https://maps.googleapis.com/maps/api/staticmap?center="
-                        + m.sLat+","+m.sLon
-                        + "&zoom=16"
+                return "https://maps.googleapis.com/maps/api/staticmap?"
                         + "&size=640x400"
                         +"&markers=color:blue%7Clabel:S%7C"
                         + m.sLat + "," + m.sLon +
@@ -96,22 +94,20 @@ public class Utility {
      
     public static  void makeMap(MapNode m,int type,String polyLine)
     {
-        String dJSON = "";  
         String U = getURL(m,type,polyLine);
         try
         {
             URL url = new URL(U);
             HttpURLConnection hps = (HttpURLConnection)url.openConnection();
             InputStream in = hps.getInputStream();
-            FileOutputStream fwriter = new FileOutputStream(new File("img.jpeg"));
+            FileOutputStream fwriter = new FileOutputStream(new File("res.jpeg"));
             int ch;
             while((ch=in.read())!=-1)
             {
                 fwriter.write(ch);
             }
             //Closing Connection
-            hps.disconnect();
-        
+            hps.disconnect(); 
         }
         catch(Exception e){}
     }
