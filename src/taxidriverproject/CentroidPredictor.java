@@ -72,7 +72,7 @@ public class CentroidPredictor {
 
     private double hypothesis(double crowdDensity,double crowd,double distance,double time)
     {
-        double success =  (crowdDensity * crowd)/(distance * time);
+        double success =  (crowdDensity * crowd+1)/(distance * time+1);
         System.out.println(crowdDensity + " " + crowd + " " +distance + " "+ time);
         return success;
     }

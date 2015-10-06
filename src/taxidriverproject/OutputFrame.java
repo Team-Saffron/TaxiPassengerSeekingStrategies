@@ -5,6 +5,8 @@
  */
 package taxidriverproject;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Abhishek
@@ -22,7 +24,7 @@ public class OutputFrame extends javax.swing.JFrame {
         distanceField.setText(dist+" metres");
         timeField.setText(time+" minutes");
         addrField.setText(addr);
-        
+        jLabel1.setIcon(new ImageIcon("img.jpeg"));
     }
 
     /**
@@ -44,6 +46,8 @@ public class OutputFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBounds(new java.awt.Rectangle(50, 50, 0, 0));
+        setResizable(false);
 
         jTextField1.setEditable(false);
         jTextField1.setText("Distance:");
@@ -62,8 +66,7 @@ public class OutputFrame extends javax.swing.JFrame {
         jTextField7.setEditable(false);
         jTextField7.setText("Directions:");
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Abhishek\\TaxiPassengerSeekingStrategies\\img.jpeg")); // NOI18N
-        jLabel1.setText("jLabel1");
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\TaxiPassengerSeekingStrategies\\img.jpeg")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,7 +89,7 @@ public class OutputFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addrField)))
                 .addContainerGap())
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,8 +108,7 @@ public class OutputFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

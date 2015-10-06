@@ -23,6 +23,7 @@ public class InputWindow extends javax.swing.JFrame {
     public InputWindow() {
         
         initComponents();
+        jLabel1.setIcon(new ImageIcon("WallPaper.jpg"));
     }
 
     /**
@@ -44,6 +45,8 @@ public class InputWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBounds(new java.awt.Rectangle(50, 50, 640, 400));
+        setResizable(false);
 
         jTextField1.setEditable(false);
         jTextField1.setText("Latitude:");
@@ -60,7 +63,7 @@ public class InputWindow extends javax.swing.JFrame {
         jTextField5.setEditable(false);
         jTextField5.setText("Time:");
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Abhishek\\TaxiPassengerSeekingStrategies\\WallPaper.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\TaxiPassengerSeekingStrategies\\WallPaper.jpg")); // NOI18N
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -75,21 +78,19 @@ public class InputWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTextField5)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jTextField1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField5)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                            .addComponent(jTextField1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(timeField)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lonField)
-                            .addComponent(latField, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                        .addComponent(timeField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lonField)
+                    .addComponent(latField, javax.swing.GroupLayout.Alignment.TRAILING)))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,8 +109,7 @@ public class InputWindow extends javax.swing.JFrame {
                     .addComponent(timeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -124,7 +124,7 @@ public class InputWindow extends javax.swing.JFrame {
         ttime = Double.parseDouble(timeField.getText());
         tlat = Double.parseDouble(latField.getText());
         tlon = Double.parseDouble(lonField.getText());
-        System.out.println(tlat + " " + tlon + " " +ttime);
+        //System.out.println(tlat + " " + tlon + " " +ttime);
         try {
             TP.go();
         } catch (Exception ex) {
@@ -140,7 +140,6 @@ public class InputWindow extends javax.swing.JFrame {
      */
     void initialize() throws Exception
     {
-       System.out.println('d'); 
        InputWindow Obj = new InputWindow();
        Obj.setVisible(true);
     }
