@@ -1,6 +1,9 @@
 package taxidriverproject;import java.net.*;
 import java.io.*;
 import java.util.Iterator;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -40,7 +43,6 @@ public class MapEngine {
     
     MapEngine(MapNode m)
     {
-        //Type 0: Distance matrix api
          node = m;
          time = -1;
          dist = -1;
@@ -72,7 +74,6 @@ public class MapEngine {
     private void setPolyLine()
     {
         Obj =  Utility.requestJSON(node, 1);
-        //System.out.println(Obj);
         JSONArray routes = (JSONArray)Obj.get("routes");
         JSONObject temp = (JSONObject)routes.get(0);
         JSONObject pl = (JSONObject)temp.get("overview_polyline");
@@ -80,7 +81,6 @@ public class MapEngine {
     }
     
     //InterFacing Functions
-    
     public double getTime()
     {
         if(time==-1)
@@ -115,6 +115,15 @@ public class MapEngine {
     public void makeMap()
     {
         Utility.makeMap(node,2,getPolyLine());
+    } 
+    public void displayMap() throws Exception
+    {
+        String url  = "https://www.google.co.in/maps/dir/"
+                + node.sLat + "+" + node.sLon + "/" + node.dLat +"+" + node.dLon +"/"
+                + "@37.7496926,-122.5078631,27463m/"
+                + "data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x0:0x0!2m2!1d-122.431297!2d37.773972"
+                + "!1m5!1m1!1s0x0:0x0!2m2!1d-122.431297!2d37.773972?hl=en";
+        
+        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
     }
-  
 }

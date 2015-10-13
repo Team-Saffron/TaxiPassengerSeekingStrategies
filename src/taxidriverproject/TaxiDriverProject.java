@@ -41,17 +41,9 @@ public class TaxiDriverProject {
         //Data Loaded
         System.out.print("Data Loaded");
         System.out.println(lat + " " + lon + " " +data.size());
-        //Getting Data using J-Form
-        /*InputWindow IW = new InputWindow();
-        IW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        IW.initialize(this);*/
-        //user gps location and curr time input
-        /*Scanner in = new Scanner(System.in);
-        time = in.nextDouble();
-        lat = in.nextDouble();
-        lon = in.nextDouble();*/
+    
     }
-    void execute()
+    void execute() throws Exception
     {
         System.out.println(lat + " " + lon + " " +data.size());
         KMeans Obj = new KMeans();
@@ -74,6 +66,7 @@ public class TaxiDriverProject {
         System.out.println(googleMaps.getSource());
         System.out.println(googleMaps.getDistance());
         googleMaps.makeMap();
+        googleMaps.displayMap();
         OutputFrame output = new OutputFrame(googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
         
     }
