@@ -9,6 +9,7 @@ public class TaxiDriverProject {
     //Variable Declarations
     ArrayList<DataNode> data ;
     private double lat, lon, time;
+    private String day;
     private int windowSize = 15;
     private int dayTime = 1440;
     private int noOfClusters = 12;
@@ -27,7 +28,17 @@ public class TaxiDriverProject {
         int i;
         
         //Load Data From DataSet
-        String FileName = "src/DataFiles/Data.txt";
+        String FileName;
+        if(day.charAt(0) == 'S')            //If day is a weekend
+        {
+            System.out.println("here");
+            FileName = "src/DataFiles/weekend.txt";
+        }
+        else                                //If day is WeekDay
+        {
+            FileName = "src/DataFiles/weekday.txt";
+        }
+        
         Scanner freader = new Scanner(new File(FileName));
         while(freader.hasNextDouble())
         {
@@ -40,8 +51,7 @@ public class TaxiDriverProject {
         freader.close();
         //Data Loaded
         System.out.print("Data Loaded");
-        System.out.println(lat + " " + lon + " " +data.size());
-    
+        System.out.println(lat + " " + lon + " " +data.size()); 
     }
     void execute() throws Exception
     {
@@ -157,11 +167,12 @@ public class TaxiDriverProject {
         return new DataNode(lat, lon, time);
     }
     
-    public void setData(double t,double lt,double ln)
+    public void setData(double t,double lt,double ln,String D)
     {
         time = t;
         lat = lt;
         lon = ln;
+        day = D;
     }
     
 }
