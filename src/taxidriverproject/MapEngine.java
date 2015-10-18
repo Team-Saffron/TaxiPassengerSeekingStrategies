@@ -116,14 +116,14 @@ public class MapEngine {
     {
         Utility.makeMap(node,2,getPolyLine());
     } 
-    public void displayMap() throws Exception
+    public String displayMap() throws Exception
     {
         String url  = "https://www.google.co.in/maps/dir/"
-                + node.sLat + "+" + node.sLon + "/" + node.dLat +"+" + node.dLon +"/"
-                + "@37.7496926,-122.5078631,27463m/"
+                + node.sLat + "," + node.sLon + "/" + node.dLat +"," + node.dLon +"/"
                 + "data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x0:0x0!2m2!1d-122.431297!2d37.773972"
                 + "!1m5!1m1!1s0x0:0x0!2m2!1d-122.431297!2d37.773972?hl=en";
         
-        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+       // java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+        return url;
     }
 }

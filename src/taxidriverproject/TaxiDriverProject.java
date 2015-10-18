@@ -27,7 +27,7 @@ public class TaxiDriverProject {
         int i;
         
         //Load Data From DataSet
-        String FileName = "Data.txt";
+        String FileName = "src/DataFiles/Data.txt";
         Scanner freader = new Scanner(new File(FileName));
         while(freader.hasNextDouble())
         {
@@ -66,8 +66,8 @@ public class TaxiDriverProject {
         System.out.println(googleMaps.getSource());
         System.out.println(googleMaps.getDistance());
         googleMaps.makeMap();
-        googleMaps.displayMap();
-        OutputFrame output = new OutputFrame(googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
+        String uri = googleMaps.displayMap();
+        OutputFrame output = new OutputFrame(uri,googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
         
     }
     private ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)

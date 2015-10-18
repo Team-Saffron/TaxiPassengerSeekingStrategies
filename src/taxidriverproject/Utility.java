@@ -100,7 +100,7 @@ public class Utility {
             URL url = new URL(U);
             HttpURLConnection hps = (HttpURLConnection)url.openConnection();
             InputStream in = hps.getInputStream();
-            FileOutputStream fwriter = new FileOutputStream(new File("img.jpeg"));
+            FileOutputStream fwriter = new FileOutputStream(new File("src/images/img.jpeg"));
             int ch;
             while((ch=in.read())!=-1)
             {
