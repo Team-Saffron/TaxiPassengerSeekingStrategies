@@ -1,7 +1,13 @@
 package taxidriverproject;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 public class TaxiDriverProject {
@@ -17,7 +23,9 @@ public class TaxiDriverProject {
     private int backwardWindowWidth = 500;
     private ArrayList<Integer> crowdAtEachCentroid;
     private ArrayList<Double> densityAtEachCentroid;
-    ArrayList<DataPoint>custData,resultantCentroids;
+    ArrayList<DataPoint> custData,resultantCentroids;
+    private boolean IS_TEST = false; 
+    PrintWriter testWriter; 
     //Variable Declaration Ended
     
     void go() throws Exception
@@ -63,22 +71,31 @@ public class TaxiDriverProject {
         
         //Calculate cluster centroids, Crowd, Density at each centroids
         resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
+        writeResultantCentroid();
         crowdAtEachCentroid = Obj.calculateCrowd();
         densityAtEachCentroid = Obj.calculateDensity();
   
-        //Call Precitor
+        //Call Predictor
         CentroidPredictor CP = new CentroidPredictor(this);
         DataPoint prediction = CP.startExec();
         
         
         MapEngine googleMaps = new MapEngine(new MapNode(new DataPoint(lat,lon),prediction));
-        System.out.println(googleMaps.getDestination());
-        System.out.println(googleMaps.getSource());
-        System.out.println(googleMaps.getDistance());
-        googleMaps.makeMap();
-        String uri = googleMaps.displayMap();
-        OutputFrame output = new OutputFrame(uri,googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
+      
         
+        if(IS_TEST)
+        {   
+            testWriter.println(googleMaps.getTime() + " " + googleMaps.getDistance());
+        }
+        else
+        {
+            System.out.println(googleMaps.getDestination());
+            System.out.println(googleMaps.getSource());
+            System.out.println(googleMaps.getDistance());
+            googleMaps.makeMap();
+            String uri = googleMaps.displayMap();
+            OutputFrame output = new OutputFrame(uri,googleMaps.getDestination(), googleMaps.getDistance(), googleMaps.getTime());
+        }
     }
     private ArrayList<DataPoint>getCustData(double time,ArrayList<DataNode> data)
     {
@@ -115,10 +132,15 @@ public class TaxiDriverProject {
     
     public static void main(String[] args) throws Exception 
     {
-
-       /* TaxiDriverProject Obj = new TaxiDriverProject();
-        Obj.go();*/
-        new InputWindow().initialize();
+       // new InputWindow().initialize();
+        
+        
+        /*
+        For Testing
+        */
+        
+        Tester T = new Tester(1);   //1 For WeekDay, 0 for WeekEnd
+        T.startTest();
        
         /*MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
         MapEngine googleMaps = new MapEngine(node);
@@ -147,6 +169,11 @@ public class TaxiDriverProject {
         }
 
     };
+    
+    void writeResultantCentroid()
+    {
+         
+    }
 
     //Interfacing Functions
     ArrayList<DataPoint> getCentroids()
@@ -173,6 +200,24 @@ public class TaxiDriverProject {
         lat = lt;
         lon = ln;
         day = D;
+    }
+    public void setAsTest()
+    {
+        IS_TEST = true;
+    }
+    public void setTestOutputFile() 
+    {
+        try {
+            testWriter = new PrintWriter("testResults.txt", "UTF-8");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TaxiDriverProject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TaxiDriverProject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void closeOutputWriter() 
+    {
+        testWriter.close();
     }
     
 }
