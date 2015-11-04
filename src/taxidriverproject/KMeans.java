@@ -159,8 +159,9 @@ public class KMeans {
     }
     private void setCentroidsRandomly()
     {
+        
         centroids.clear();
         for(int i=0;i<clusters;i++)
-            centroids.add(data.get((int)(Math.random()*samples)));
+            centroids.add(data.get((int)(i*10)));
     }
 }

@@ -16,6 +16,7 @@ public class TaxiDriverProject {
     ArrayList<DataNode> data ;
     private double lat, lon, time;
     private String day;
+    private int testID = 1;
     private int windowSize = 15;
     private int dayTime = 1440;
     private int noOfClusters = 12;
@@ -85,7 +86,8 @@ public class TaxiDriverProject {
         
         if(IS_TEST)
         {   
-            testWriter.println(googleMaps.getTime() + " " + googleMaps.getDistance());
+            testWriter.println(testID + " " +googleMaps.getTime() + " " + googleMaps.getDistance());
+            testID = testID + 1;
         }
         else
         {

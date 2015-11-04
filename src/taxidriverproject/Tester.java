@@ -28,6 +28,7 @@ public class Tester {
         TP.setTestOutputFile();
         TP.setAsTest();
         for (DataNode temp : testData) {
+            System.out.println("@@" + temp + "@@");
             TP.setData(temp.time, temp.lat, temp.lon, testDay);
             TP.go();
             TP.execute();
@@ -50,17 +51,18 @@ public class Tester {
        testData = new ArrayList<>();
         DataNode temp;
         Scanner freader = new Scanner(new File(testFile));
-      temp = TP.new DataNode();
+      
         while(freader.hasNextDouble())
         { 
+            temp = TP.new DataNode();
             temp.time = freader.nextDouble();
           //    System.out.println(temp.time);
             temp.lat = freader.nextDouble();
           //    System.out.println(temp.lat);
             temp.lon = freader.nextDouble();
            //   System.out.println(temp.lon);
+            
             testData.add(temp);
-        }
-        
+        }   
     }
 }
