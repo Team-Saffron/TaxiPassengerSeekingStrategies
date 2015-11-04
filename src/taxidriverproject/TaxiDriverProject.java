@@ -210,7 +210,7 @@ public class TaxiDriverProject {
     public void setTestOutputFile() 
     {
         try {
-            testWriter = new PrintWriter("testResults.txt", "UTF-8");
+            testWriter = new PrintWriter("src/DataFiles/testResults.txt", "UTF-8");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TaxiDriverProject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
