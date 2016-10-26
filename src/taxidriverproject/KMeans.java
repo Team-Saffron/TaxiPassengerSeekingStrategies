@@ -1,13 +1,13 @@
 package taxidriverproject;
 import java.util.ArrayList;
 
-public class KMeans {
+public class KMeans implements Clustering{
     
     private ArrayList<DataPoint> centroids, data, tempCentroids;
     private ArrayList<Integer> clusterOf, tempClusterOf;
     private int clusters,samples;
     private int noOfIterations, noOfRandomInit;
-    
+   
     
     KMeans()
     {
@@ -15,7 +15,8 @@ public class KMeans {
         noOfIterations = 50;
     }
     
-    public ArrayList<DataPoint> KMeansAlgo(ArrayList<DataPoint> x,int y)
+    @Override
+    public ArrayList<DataPoint> doClustering(ArrayList<DataPoint> x,int y)
     {
         data = x;           //dataset
         samples = x.size(); //number of datapoints
@@ -29,7 +30,7 @@ public class KMeans {
        
         while(noOfRandomInit-- > 0)
         {   
-            setCentroidsRandomly();    
+            initialCentroids();    
             clusterOf = new ArrayList<>();
             for(int i=0;i<samples;i++)
                 clusterOf.add(0);
@@ -74,7 +75,7 @@ public class KMeans {
 
                 //System.out.println(cost);   
             }
-            double cost = costFunc(); 
+            double cost = getCost(); 
             if(cost < minCost)
             {
                    tempCentroids = centroids;  //Temporary storing centroids and Clusterof
@@ -87,7 +88,8 @@ public class KMeans {
         return centroids;
     }
     
-    ArrayList<Integer> calculateCrowd()
+    @Override
+    public ArrayList<Integer> calculateCrowd()
     {
         ArrayList<Integer> toReturn =  new ArrayList<>();
         int i;
@@ -107,7 +109,8 @@ public class KMeans {
         }
         return toReturn;
     }
-    ArrayList<Double> calculateDensity()
+    @Override
+    public ArrayList<Double> calculateDensity()
     {
         ArrayList<Double> toReturn = new ArrayList<>();
         ArrayList<Double> maxDist = new ArrayList<>();
@@ -150,16 +153,18 @@ public class KMeans {
         }
         return toReturn;
     }
-    private double costFunc()
+    
+    @Override
+    public double getCost()
     {
         double res = 0.0;
         for(int i=0;i<samples;i++)
             res+=((DataPoint.dist(data.get(i),centroids.get(clusterOf.get(i))))/10000000);
         return res;
     }
-    private void setCentroidsRandomly()
+    @Override
+    public void initialCentroids()
     {
-        
         centroids.clear();
         for(int i=0;i<clusters;i++)
             centroids.add(data.get((int)(i*10)));

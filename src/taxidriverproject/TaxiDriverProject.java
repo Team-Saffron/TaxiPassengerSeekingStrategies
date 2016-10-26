@@ -71,7 +71,7 @@ public class TaxiDriverProject {
         //filtering done
         
         //Calculate cluster centroids, Crowd, Density at each centroids
-        resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
+        resultantCentroids = Obj.doClustering(custData, noOfClusters);
         writeResultantCentroid();
         crowdAtEachCentroid = Obj.calculateCrowd();
         densityAtEachCentroid = Obj.calculateDensity();
@@ -134,21 +134,21 @@ public class TaxiDriverProject {
     
     public static void main(String[] args) throws Exception 
     {
-       // new InputWindow().initialize();
+        new InputWindow().initialize();
         
         
         /*
         For Testing
         */
         
-        Tester T = new Tester(1);   //1 For WeekDay, 0 for WeekEnd
-        T.startTest();
+        //Tester T = new Tester(1);   //1 For WeekDay, 0 for WeekEnd
+        //T.startTest();
        
-        /*MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
         MapEngine googleMaps = new MapEngine(node);
         
         System.out.println(googleMaps.getSource());
-        googleMaps.makeMap();*/
+        googleMaps.makeMap();
         
     }
     
