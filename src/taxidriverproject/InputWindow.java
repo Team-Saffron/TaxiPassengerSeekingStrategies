@@ -1,24 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package taxidriverproject;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
-/**
- *
- * @author Abhishek
- */
 public class InputWindow extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InputWindow
-     */
     TaxiDriverProject TP = new TaxiDriverProject();
     public InputWindow() {
         
@@ -151,7 +138,7 @@ public class InputWindow extends javax.swing.JFrame {
         tlat = Double.parseDouble(latField.getText());
         tlon = Double.parseDouble(lonField.getText());
         tDay = dayField.getText();
-        //System.out.println(tlat + " " + tlon + " " +ttime);
+        
         try {
             TP.setData(ttime, tlat, tlon, tDay);
             TP.go();

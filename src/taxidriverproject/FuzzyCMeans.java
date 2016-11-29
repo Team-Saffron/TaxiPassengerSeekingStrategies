@@ -10,27 +10,30 @@ public class FuzzyCMeans implements Clustering{
     private Double[][] fuzzyMembership;
     
     FuzzyCMeans() {
-        noOfRandomInit = 1;
+        noOfRandomInit = 30;
     }
     
     @Override
     public ArrayList<DataPoint> doClustering(ArrayList<DataPoint> data, int clustersRequired) {
         
+        double currCost = Double.MAX_VALUE;            
         this.data = data;
         samples = data.size();
         clusters = clustersRequired;
+
+        centroids = new ArrayList<>(); //cluster Centroid Positions
+        
         ArrayList<DataPoint> newCentroids = new ArrayList<>();
-        
+
         fuzzyMembership = new Double[samples][clusters];
-        
-        for(int i = 0;i<samples;i++)
-                for(int j = 0;j<clusters;j++)
-                        fuzzyMembership[i][j] = 0.0;
-        
+        initialCentroids();
+          
          while(noOfRandomInit-- > 0) {
-             
-              initialCentroids();
-              
+       
+            for(int i = 0;i<samples;i++)
+                    for(int j = 0;j<clusters;j++)
+                            fuzzyMembership[i][j] = 0.0;
+            
               //assign fuzzy membership
               for(int i = 0;i<samples;i++) {
                   for(int j = 0;j<clusters;j++) {
@@ -39,9 +42,11 @@ public class FuzzyCMeans implements Clustering{
               }
               
              newCentroids = getCentroidList();
-          
+             centroids = newCentroids;
          }
-         return newCentroids;
+         
+         
+         return centroids;
     }
     
     //returns the new set of centroids adjusted after each iteration
@@ -52,14 +57,18 @@ public class FuzzyCMeans implements Clustering{
         for(int j = 0;j<clusters;j++) {
             sum = 0.0;
             for(int i = 0;i<samples;i++)
-                    sum = sum + fuzzyMembership[i][j];
+                    sum = sum + fuzzyMembership[i][j] * fuzzyMembership[i][j]*1.0;
             
             double x=0.0;
             double y=0.0;
             for(int i = 0;i<samples;i++) {
-                x = x + data.get(i).lat * fuzzyMembership[i][j];
-                y = y + data.get(i).lon * fuzzyMembership[i][j];
+                x = x + data.get(i).lat * fuzzyMembership[i][j] * fuzzyMembership[i][j] * 1.0;
+                y = y + data.get(i).lon * fuzzyMembership[i][j] * fuzzyMembership[i][j] * 1.0;
             }   
+            
+            x/=(sum+1.0);
+            y/=(sum+1.0);
+            
             result.add(new DataPoint(x,y));
         }
         return result;
@@ -77,14 +86,45 @@ public class FuzzyCMeans implements Clustering{
         }
         return result;
     }
+    
+    
+    public ArrayList<Double> maxExpectedDistanceOfAClusterRegion() {
+        
+        ArrayList<Double> result = new ArrayList();
+        
+        for(int i =0;i<clusters;i++) {       
+            double expectedMaxDist = 0.0;
+            for(int j = 0;j<samples;j++)
+                 expectedMaxDist = expectedMaxDist + (fuzzyMembership[j][i]*1.0*DataPoint.dist(centroids.get(i), data.get(j)));
+     
+            result.add(expectedMaxDist);
+        }
+        return result;
+    }
 
     @Override
     public ArrayList<Double> calculateDensity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        //ecpected crowd by sqauare radius
+        
+        ArrayList<Integer> crowd = calculateCrowd();
+        ArrayList<Double> maxDist = maxExpectedDistanceOfAClusterRegion();
+        
+        
+        ArrayList<Double> result = new ArrayList();
+        
+        for(int i = 0 ;i<clusters;i++) {
+            
+            double temp = crowd.get(i)/(maxDist.get(i) * maxDist.get(i) *1.0);
+            result.add(temp);
+        }
+        
+        return result;
     }
 
     @Override
     public double getCost() {
+        
         double result = 0.0;
         for(int i = 0;i<samples;i++) {
             for(int j = 0;j<clusters;j++) {
@@ -97,13 +137,16 @@ public class FuzzyCMeans implements Clustering{
     private Double getFuzzyMembership(DataPoint x,DataPoint y) {
         double sum = 0.0;
         double dist1 = DataPoint.dist(x,y);
+        
         for(int i = 0;i<clusters;i++) {
             double dist2 = DataPoint.dist(x, data.get(i));
-            if(dist2 == 0.0)
-                    return 0.0;
-            sum = sum + (dist1 * 1.0)/dist2;
+            
+            dist2 = dist2 * dist2 * 1.0;
+            dist2 = Math.exp(-dist2);
+            
+            sum = sum + dist2;
         }
-        return (1.0/sum);
+        return ((dist1+1.0)/(sum+1.0));
     }
     
     @Override
@@ -113,5 +156,4 @@ public class FuzzyCMeans implements Clustering{
         for(int i=0;i<clusters;i++)
             centroids.add(data.get((int)(i*10)));
     }
-    
 }

@@ -9,5 +9,4 @@ public interface Clustering {
      public ArrayList<Double> calculateDensity();
      public double getCost();
      public void initialCentroids();
-     
 }
