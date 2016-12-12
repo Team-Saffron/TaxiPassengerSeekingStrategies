@@ -1,14 +1,12 @@
 package taxidriverproject;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 public class TaxiDriverProject {
     
@@ -65,13 +63,15 @@ public class TaxiDriverProject {
     void execute() throws Exception
     {
         System.out.println(lat + " " + lon + " " +data.size());
-        KMeans Obj = new KMeans();
+        
+        //Clustering Obj = new KMeans();
+        Clustering Obj = new FuzzyCMeans();
         //filter the dataset(data Window)*/
         custData = getCustData(time, data);
         //filtering done
         
         //Calculate cluster centroids, Crowd, Density at each centroids
-        resultantCentroids = Obj.KMeansAlgo(custData, noOfClusters);
+        resultantCentroids = Obj.doClustering(custData, noOfClusters);
         writeResultantCentroid();
         crowdAtEachCentroid = Obj.calculateCrowd();
         densityAtEachCentroid = Obj.calculateDensity();
@@ -134,22 +134,22 @@ public class TaxiDriverProject {
     
     public static void main(String[] args) throws Exception 
     {
-       // new InputWindow().initialize();
+        new InputWindow().initialize();
         
         
         /*
         For Testing
         */
         
-        Tester T = new Tester(1);   //1 For WeekDay, 0 for WeekEnd
-        T.startTest();
+        //Tester T = new Tester(1);   //1 For WeekDay, 0 for WeekEnd
+        //T.startTest();
        
-        /*MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
-        MapEngine googleMaps = new MapEngine(node);
+        //MapNode node = new MapNode(28.6797,77.0926,28.7129,77.1575);
+        //MapEngine googleMaps = new MapEngine(node);
         
-        System.out.println(googleMaps.getSource());
-        googleMaps.makeMap();*/
-        
+        //System.out.println(googleMaps.getSource());
+        //googleMaps.makeMap();
+      
     }
     
     public class DataNode
